@@ -1,0 +1,3 @@
+name = Plural formula configurator
+description = Configure plural formulas for site languages.
+core = 6.x
