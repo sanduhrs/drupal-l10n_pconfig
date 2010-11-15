@@ -32,4 +32,4 @@ INSTALLATION
 CONTRIBUTORS
 --------------------------------------------------------------------------------
 
-G‡bor Hojtsy http://drupal.org/user/4166 (current maintainer)
+GÃ¡bor Hojtsy http://drupal.org/user/4166 (current maintainer)
