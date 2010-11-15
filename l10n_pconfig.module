@@ -13,7 +13,7 @@
 // = Core hooks ================================================================
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_form_alter().
  *
  * Add helpers to let people handle plural formula setup and correction easier.
  */
@@ -27,6 +27,7 @@ function l10n_pconfig_form_alter(&$form, $form_state, $form_id) {
 
   elseif (in_array($form_id, array('locale_languages_custom_form', 'locale_languages_edit_form'))) {
     // Build a list of examples we have with existing languages.
+    include_once DRUPAL_ROOT . '/includes/iso.inc';
     $formulas = l10n_pconfig_plural_formulas();
     $predefined = _locale_get_predefined_list();
     $types = array();
@@ -46,20 +47,24 @@ function l10n_pconfig_form_alter(&$form, $form_state, $form_id) {
     // Pick previous plural formula if editing an existing language.
     $plural_formula = '';
     if (isset($form['langcode']['#value'])) {
-      $language = db_fetch_object(db_query("SELECT * FROM {languages} WHERE language = '%s'", $form['langcode']['#value']));
+      $language = db_select('languages', 'l')
+        ->fields('l', array('formula', 'plurals'))
+        ->condition('l.language', $form['langcode']['#value'])
+        ->execute()
+        ->fetchObject();
       if (!empty($language->formula) && !empty($language->plurals)) {
         $plural_formula = 'nplurals='. $language->plurals .'; plural='. strtr($language->formula, array('$' => '')) .';';
       }
     }
 
     // Add text field to enter the plural formula.
-    $form_root['submit']['#weight'] = 200;
+    $form_root['actions']['#weight'] = 200;
     $form_root['direction']['#weight'] = 180;
     $form_root['plural_formula'] = array(
       '#type' => 'textfield',
       '#title' => t('Plural formula'),
       '#weight' => 150,
-      '#description' => t('The plural formula for this language in the format used in .po files. Either check a pre-existing .po file or see <a href="http://translate.sourceforge.net/wiki/l10n/pluralforms">the wordforge plural forms list</a>. Some known examples:') . theme('item_list', $examples),
+      '#description' => t('The plural formula for this language in the format used in .po files. Either check a pre-existing .po file or see <a href="http://translate.sourceforge.net/wiki/l10n/pluralforms">the wordforge plural forms list</a>. Some known examples:') . theme('item_list', array('items' => $examples)),
       '#default_value' => $plural_formula
     );
     $form['#validate'][] = 'l10n_pconfig_custom_plural_formula_validate';
@@ -214,7 +219,13 @@ function l10n_pconfig_plural_formulas() {
  */
 function l10n_pconfig_update_plural_formula($langcode, $plural_formula) {
   if (is_array($parsed_formula = l10n_pconfig_parse_plural_formula($plural_formula))) {
-    db_query("UPDATE {languages} SET plurals = %d, formula = '%s' WHERE language = '%s'", $parsed_formula[0], $parsed_formula[1], $langcode);
+    db_update('languages')
+      ->fields(array(
+        'plurals' => $parsed_formula[0],
+        'formula' => $parsed_formula[1],
+      ))
+      ->condition('language', $langcode)
+      ->execute();
   }
 }
 

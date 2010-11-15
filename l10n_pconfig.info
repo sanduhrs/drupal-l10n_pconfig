@@ -1,5 +1,6 @@
 name = Plural formula configurator
 description = Configure plural formulas for site languages.
-core = 6.x
+core = 7.x
 package = Multilanguage
 dependencies[] = locale
+files[] = l10n_pconfig.module
