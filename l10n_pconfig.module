@@ -52,7 +52,7 @@ function l10n_pconfig_form_alter(&$form, $form_state, $form_id) {
         ->condition('l.language', $form['langcode']['#value'])
         ->execute()
         ->fetchObject();
-      if (!empty($language->formula) && !empty($language->plurals)) {
+      if (!empty($language->formula) || !empty($language->plurals)) {
         $plural_formula = 'nplurals='. $language->plurals .'; plural='. strtr($language->formula, array('$' => '')) .';';
       }
     }
