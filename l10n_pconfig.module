@@ -64,7 +64,8 @@ function l10n_pconfig_form_alter(&$form, $form_state, $form_id) {
       '#title' => t('Plural formula'),
       '#weight' => 150,
       '#description' => t('The plural formula for this language in the format used in .po files. Either check a pre-existing .po file or see <a href="http://translate.sourceforge.net/wiki/l10n/pluralforms">the wordforge plural forms list</a>. Some known examples:') . theme('item_list', array('items' => $examples)),
-      '#default_value' => $plural_formula
+      '#default_value' => $plural_formula,
+      '#maxlength' => 255,
     );
     $form['#validate'][] = 'l10n_pconfig_custom_plural_formula_validate';
     $form['#submit'][] = 'l10n_pconfig_custom_plural_formula_submit';
