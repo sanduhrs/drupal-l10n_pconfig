@@ -1,0 +1,6 @@
+services:
+  l10n_pconfig.language_form:
+    class: Drupal\l10n_pconfig\Form\PluralFormulaLanguageForm
+    arguments: ['@locale.plural.formula', '@l10n_pconfig.drupalorg_plural_formula']
+  l10n_pconfig.drupalorg_plural_formula:
+    class: Drupal\l10n_pconfig\DrupalOrgPluralFormula

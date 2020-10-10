@@ -1,0 +1,8 @@
+name: 'Plural formula configurator'
+type: module
+description: 'Configure plural formulas for site languages.'
+package: Multilingual
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:locale
+  - drupal:language
