@@ -1,0 +1,13 @@
+{
+    "name": "drupal/l10_pconfig",
+    "description": "Configure plural formulas for site languages.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Stefan Auditor",
+            "email": "stefan@auditor.email"
+        }
+    ],
+    "require": {}
+}
